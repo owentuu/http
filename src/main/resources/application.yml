@@ -1,2 +1,17 @@
 server:
   port: 8099
+  ssl:
+#    key-store: classpath*:keystore.p12
+    key-store:  classpath:3389483.pfx
+    key-store-type: PKCS12
+#    key-alias: tomcat
+#    key-store-password: 123456
+    key-store-password: 5yQisaO0
+
+#server.port=8099
+##ssl 证书名字
+
+##证书密码
+#server.ssl.key-store-password=5yQisaO0
+##证书类型
+#server.ssl.keyStoreType=PKCS12
