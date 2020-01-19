@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -32,19 +32,31 @@ public class CommonServiceImpl implements CommonService {
 //            connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
             connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; CIBA)");
             inputStream = connection.getInputStream();
+             int total = connection.getContentLength();
             ServletOutputStream outputStream = response.getOutputStream();
             SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
             String filename = format.format(new Date())+".mp4";
             //要下载的这个文件的类型----客户端通过文件的MIME类型去区分类型
-            response.setContentType("\"video/mpeg4; charset=utf-8\"");
+//            response.setContentType("video/mpeg4; charset=utf-8");
+            response.setContentType("video/mpeg4");
             //告诉客户端该文件不是直接解析 而是以附件的形式打开（下载）
             response.setHeader("Content-Disposition","attachment;filename=" + filename);
-            int length=0;
+            int length;
             byte[] bytes = new byte[1024];
             while ((length = inputStream.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, length);
+                outputStream.flush();
             }
-            outputStream.flush();
+
+//            byte[] bytes = new byte[total];
+//            int read;
+//            try {
+//                 read= inputStream.read(bytes);
+//            }catch (IOException e){
+//                log.error("源文件IO异常："+e.getMessage());
+//            }
+//            outputStream.write(bytes);
+//            outputStream.flush();
         }catch (MalformedURLException e){
             log.error("url错误:"+e.getMessage());
             return "url错误";
@@ -63,4 +75,5 @@ public class CommonServiceImpl implements CommonService {
         }
         return "success";
     }
+
 }
