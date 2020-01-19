@@ -17,7 +17,6 @@ public class VideoUtil {
      */
     public static long getVideoDuration(File video) {
         long duration = 0L;
-        () -> org.bytedeco.ffmpeg
         FFmpegFrameGrabber ff = new FFmpegFrameGrabber(video);
         try {
             ff.start();
